@@ -1,0 +1,25 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    webservice_user_provider:
+        class: Acme\WebserviceUserBundle\Security\User\WebserviceUserProvider
+    api_key_user_provider:
+        class: AppBundle\Security\ApiKeyUserProvider
+
+    sonata.admin.lesson:
+        class: AppBundle\Admin\LessonAdmin
+        arguments: [~, AppBundle\Entity\Lesson, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Classe", label: "Lesson" }
+
+    sonata.admin.grade:
+        class: AppBundle\Admin\GradeAdmin
+        arguments: [~, AppBundle\Entity\Grade, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Classe", label: "Grade" }
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

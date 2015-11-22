@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <section class="container">
+        <div class="row">
+            <h1 class="col-md-6 col-md-offset-3">Les cours - IIM</h1>
+            {% for lesson in lessons %}
+                <article class="col-md-4">
+                    <h2>{{ lesson.getTitle() }}</h2>
+
+                    <p>{{ lesson.getSummary }}</p>
+
+                    <p>{{ lesson.getWriter.getUsername }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

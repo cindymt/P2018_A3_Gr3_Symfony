@@ -1,0 +1,50 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+        Acme\WebserviceUserBundle\Security\User\WebserviceUser: sha512
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        our_db_provider:
+            entity:
+                class: AppBundle:User
+        webservice:
+            id: webservice_user_provider
+        api_key_user_provider:
+            id: api_key_user_provider
+
+
+    firewalls:
+        default:
+            anonymous:  ~
+            pattern:    ^/
+            http_basic: ~
+            form_login:
+                login_path: /login
+                check_path: /login_check
+            provider:   our_db_provider
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        secured_area:
+            pattern: ^/admin
+            stateless: true
+            simple_preauth:
+                authenticator: apikey_authenticator
+            provider: api_key_user_provider
+
+
+#    access_control :
+#        # require ROLE_ADMIN for /admin*
+#        - { path: ^/admin, roles: ROLE_ADMIN }
